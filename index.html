@@ -6,10 +6,50 @@
     <title>YardCheck AI</title>
     <!-- Keep Tailwind CDN for simplicity -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #startup-error {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #fef2f2;
+        z-index: 9999;
+        padding: 2rem;
+        font-family: monospace;
+        overflow: auto;
+      }
+      #startup-error h2 { color: #dc2626; font-size: 1.5rem; margin-bottom: 1rem; }
+      #startup-error pre { background: #fff; padding: 1rem; border: 1px solid #fecaca; border-radius: 0.5rem; color: #7f1d1d; white-space: pre-wrap; }
+    </style>
     <script>
-      // Minimal Polyfill for libraries that expect Node.js globals
+      // 1. Polyfills for Node.js globals (Critical for some libraries)
       window.global = window;
       window.process = window.process || { env: {} };
+      window.Buffer = window.Buffer || [];
+
+      // 2. Global Error Handler to catch crash before React loads
+      window.onerror = function(message, source, lineno, colno, error) {
+        const errorDiv = document.getElementById('startup-error');
+        const errorContent = document.getElementById('error-content');
+        if (errorDiv && errorContent) {
+          errorDiv.style.display = 'block';
+          errorContent.textContent += `[Global Error]: ${message}\nLocation: ${source}:${lineno}:${colno}\n\n${error?.stack || ''}\n\n`;
+        }
+        // Also log to console
+        console.error("Global Catch:", error);
+      };
+
+      // 3. Catch Unhandled Promise Rejections (e.g., failed imports)
+      window.onunhandledrejection = function(event) {
+        const errorDiv = document.getElementById('startup-error');
+        const errorContent = document.getElementById('error-content');
+        if (errorDiv && errorContent) {
+          errorDiv.style.display = 'block';
+          errorContent.textContent += `[Unhandled Rejection]: ${event.reason}\n\n`;
+        }
+      };
       
       tailwind.config = {
         theme: {
@@ -45,6 +85,17 @@
 </head>
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-brand-100">
     <div id="root"></div>
+    
+    <!-- Fallback Error Screen -->
+    <div id="startup-error">
+      <h2>Startup Error</h2>
+      <p>The application failed to initialize. Please show this to the developer:</p>
+      <pre id="error-content"></pre>
+      <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #dc2626; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">
+        Reload Application
+      </button>
+    </div>
+
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>

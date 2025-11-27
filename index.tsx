@@ -43,16 +43,22 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
   }
 }
 
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
-}
+try {
+  const rootElement = document.getElementById('root');
+  if (!rootElement) {
+    throw new Error("Could not find root element to mount to");
+  }
 
-const root = createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>
-);
+  const root = createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+} catch (e) {
+  console.error("Failed to mount React application:", e);
+  // Re-throw to trigger global handler in index.html
+  throw e;
+}

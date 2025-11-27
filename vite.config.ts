@@ -8,12 +8,10 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Define process.env as a real object. This prevents libraries that check 
-      // `process.env.NODE_ENV` from crashing if `process` is undefined or `env` is missing.
-      'process.env': {
-        NODE_ENV: JSON.stringify(mode),
-        API_KEY: JSON.stringify(env.API_KEY || '')
-      }
+      // Safely replace ONLY the specific API key string.
+      // We do NOT replace 'process.env' entirely, as it breaks the runtime polyfill in index.html
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
+      'process.env.NODE_ENV': JSON.stringify(mode),
     },
   }
 })
