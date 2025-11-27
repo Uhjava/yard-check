@@ -3,6 +3,8 @@ import { AuditSession, Unit } from '../types';
 import { MOCK_UNITS } from '../constants';
 
 // Declare the injected variable from vite.config.ts
+// If Vite fails to replace this, accessing it directly would throw.
+// We handle this via the safe getter below.
 declare const __APP_ENV_API_KEY__: string;
 
 // Lazy initialization holder
@@ -12,8 +14,16 @@ let aiClient: GoogleGenAI | null = null;
 const getAiClient = (): GoogleGenAI | null => {
   if (aiClient) return aiClient;
 
-  // Use the injected global constant from Vite
-  const apiKey = __APP_ENV_API_KEY__;
+  // Safe access to the injected variable
+  let apiKey = '';
+  try {
+    // @ts-ignore - In case the define plugin didn't run, check global scope or avoid crash
+    if (typeof __APP_ENV_API_KEY__ !== 'undefined') {
+      apiKey = __APP_ENV_API_KEY__;
+    }
+  } catch (e) {
+    console.warn("Could not access API Key variable");
+  }
 
   if (!apiKey || apiKey.length === 0) {
     console.warn("Gemini API Key is missing. AI features will not work.");
