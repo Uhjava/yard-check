@@ -2,10 +2,29 @@ import { GoogleGenAI } from "@google/genai";
 import { AuditSession, Unit } from '../types';
 import { MOCK_UNITS } from '../constants';
 
-// Safely initialize AI. If API_KEY is missing (e.g. during build), it won't crash immediately,
-// but calls will fail gracefully.
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+// Lazy initialization holder
+let aiClient: GoogleGenAI | null = null;
+
+// Helper to safely get the AI client instance
+const getAiClient = (): GoogleGenAI | null => {
+  if (aiClient) return aiClient;
+
+  // Safe access to process.env to avoid ReferenceErrors
+  const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) ? process.env.API_KEY : '';
+
+  if (!apiKey) {
+    console.warn("Gemini API Key is missing. AI features will not work.");
+    return null;
+  }
+
+  try {
+    aiClient = new GoogleGenAI({ apiKey });
+    return aiClient;
+  } catch (error) {
+    console.error("Failed to initialize GoogleGenAI:", error);
+    return null;
+  }
+};
 
 // Helper to convert File to base64 for Gemini
 const fileToGenerativePart = async (file: File) => {
@@ -28,8 +47,9 @@ const fileToGenerativePart = async (file: File) => {
 };
 
 export const processAuditFile = async (file: File, yardName: string): Promise<string[]> => {
-  if (!apiKey) {
-    console.error("API Key is missing");
+  const ai = getAiClient();
+  if (!ai) {
+    console.error("AI Client not initialized (Missing API Key)");
     return [];
   }
 
@@ -73,7 +93,8 @@ export const processAuditFile = async (file: File, yardName: string): Promise<st
 };
 
 export const generateAuditReport = async (session: AuditSession): Promise<string> => {
-  if (!apiKey) return "API Key is missing. Please configure your environment variables.";
+  const ai = getAiClient();
+  if (!ai) return "API Key is missing. Please configure your environment variables.";
 
   const presentCount = Object.values(session.records).filter(r => r.status === 'PRESENT').length;
   const missingCount = Object.values(session.records).filter(r => r.status === 'MISSING').length;
