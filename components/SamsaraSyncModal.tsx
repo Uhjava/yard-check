@@ -1,1 +1,2 @@
-export default function SamsaraSyncModal() { return null; }
+// File deprecated. Samsara integration removed.
+export default () => null;

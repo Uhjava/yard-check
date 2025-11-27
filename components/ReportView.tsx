@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { AuditSession, UnitStatus } from '../types';
 import { MOCK_UNITS } from '../constants';
 import { generateAuditReport } from '../services/geminiService';
-import { CheckCircle, AlertTriangle, Sparkles, ArrowLeft, Share2 } from 'lucide-react';
+import { CheckCircle, AlertTriangle, Sparkles, ArrowLeft } from 'lucide-react';
 
 interface ReportViewProps {
   session: AuditSession;

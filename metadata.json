@@ -1,8 +1,5 @@
 {
   "name": "YardCheck AI",
   "description": "A mobile-first fleet inventory management tool designed for walking audits at Davenport and Movie Ranch yards. Features AI-powered report generation.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
+  "requestFramePermissions": []
 }
