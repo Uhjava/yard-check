@@ -1,0 +1,225 @@
+import { Unit } from './types';
+
+export const MOCK_UNITS: Unit[] = [
+  // 1 Room (GST 01 Series)
+  { id: "GST 01-01", category: "1 Room" },
+  { id: "GST 01-02", category: "1 Room" },
+  { id: "GST 01-03", category: "1 Room" },
+  { id: "GST 01-04", category: "1 Room" },
+  { id: "GST 01-05", category: "1 Room" },
+  { id: "GST 01-06", category: "1 Room" },
+  { id: "GST 01-07", category: "1 Room" },
+  { id: "GST 01-08", category: "1 Room" },
+  { id: "GST 01-09", category: "1 Room" },
+  { id: "GST 01-10", category: "1 Room" },
+  { id: "GST 01-11", category: "1 Room" },
+  { id: "GST 01-12", category: "1 Room" },
+  { id: "GST 01-13", category: "1 Room" },
+
+  // 2 Room (GST 02 Series)
+  { id: "GST 02-01", category: "2 Room" },
+  { id: "GST 02-02", category: "2 Room" },
+  { id: "GST 02-03", category: "2 Room" },
+  { id: "GST 02-04", category: "2 Room" },
+  { id: "GST 02-05", category: "2 Room" },
+  { id: "GST 02-06", category: "2 Room" },
+  { id: "GST 02-07", category: "2 Room" },
+  { id: "GST 02-08", category: "2 Room" },
+  { id: "GST 02-09", category: "2 Room" },
+  { id: "GST 02-10", category: "2 Room" },
+  { id: "GST 02-11", category: "2 Room" },
+  { id: "GST 02-12", category: "2 Room" },
+  { id: "GST 02-13", category: "2 Room" },
+  { id: "GST 02-14", category: "2 Room" },
+  { id: "GST 02-15", category: "2 Room" },
+  { id: "GST 02-16", category: "2 Room" },
+  { id: "GST 02-17", category: "2 Room" },
+  { id: "GST 02-18", category: "2 Room" },
+  { id: "GST 02-19", category: "2 Room" },
+  { id: "GST 02-20", category: "2 Room" },
+  { id: "GST 02-21", category: "2 Room" },
+  { id: "GST 02-22", category: "2 Room" },
+  { id: "GST 02-23", category: "2 Room" },
+  { id: "GST 02-24", category: "2 Room" },
+  { id: "GST 02-25", category: "2 Room" },
+  { id: "GST 02-26", category: "2 Room" },
+  { id: "GST 02-27", category: "2 Room" },
+  { id: "GST 02-28", category: "2 Room" },
+  { id: "GST 02-29", category: "2 Room" },
+  { id: "GST 02-30", category: "2 Room" },
+  { id: "GST 02-31", category: "2 Room" },
+  { id: "GST 02-32", category: "2 Room" },
+  { id: "GST 02-33", category: "2 Room" },
+  { id: "GST 02-34", category: "2 Room" },
+  { id: "GST 02-35", category: "2 Room" },
+  { id: "GST 02-36", category: "2 Room" },
+
+  // 3 Room (GST 03 Series)
+  { id: "GST 03-01", category: "3 Room" },
+  { id: "GST 03-02", category: "3 Room" },
+  { id: "GST 03-03", category: "3 Room" },
+  { id: "GST 03-04", category: "3 Room" },
+  { id: "GST 03-05", category: "3 Room" },
+  { id: "GST 03-06", category: "3 Room" },
+  { id: "GST 03-07", category: "3 Room" },
+  { id: "GST 03-08", category: "3 Room" },
+  { id: "GST 03-09", category: "3 Room" },
+  { id: "GST 03-10", category: "3 Room" },
+  { id: "GST 03-11", category: "3 Room" },
+  { id: "GST 03-12", category: "3 Room" },
+  { id: "GST 03-13", category: "3 Room" },
+  { id: "GST 03-14", category: "3 Room" },
+  { id: "GST 03-15", category: "3 Room" },
+  { id: "GST 03-16", category: "3 Room" },
+  { id: "GST 03-17", category: "3 Room" },
+  { id: "GST 03-18", category: "3 Room" },
+  { id: "GST 03-19", category: "3 Room" },
+  { id: "GST 03-20", category: "3 Room" },
+  { id: "GST 03-21", category: "3 Room" },
+  { id: "GST 03-22", category: "3 Room" },
+  { id: "GST 03-23", category: "3 Room" },
+  { id: "GST 03-24", category: "3 Room" },
+  { id: "GST 03-25", category: "3 Room" },
+  { id: "GST 03-26", category: "3 Room" },
+  { id: "GST 03-27", category: "3 Room" },
+  { id: "GST 03-28", category: "3 Room" },
+  { id: "GST 03-29", category: "3 Room" },
+  { id: "GST 03-30", category: "3 Room" },
+  { id: "GST 03-31", category: "3 Room" },
+  { id: "GST 03-32", category: "3 Room" },
+  { id: "GST 03-33", category: "3 Room" },
+  { id: "GST 03-34", category: "3 Room" },
+  { id: "GST 03-35", category: "3 Room" },
+  { id: "GST 03-38", category: "3 Room" },
+  { id: "GST 03-39", category: "3 Room" },
+
+  // 5th Wheel
+  { id: "GST 05-01", category: "5th Wheel" },
+  { id: "GST 05-02", category: "5th Wheel" },
+  { id: "GST 05-03", category: "5th Wheel" },
+  { id: "GST 05-04", category: "5th Wheel" },
+  { id: "GST 05-05", category: "5th Wheel" },
+
+  // 8 Station HMU
+  { id: "GHM 08-01", category: "8 Station HMU" },
+  { id: "GHM 08-02", category: "8 Station HMU" },
+  { id: "GHM 08-03", category: "8 Station HMU" },
+  { id: "GHM 08-04", category: "8 Station HMU" },
+  { id: "GHM 08-05", category: "8 Station HMU" },
+  { id: "GHM 08-06", category: "8 Station HMU" },
+
+  // 10 Station
+  { id: "GHM 09-01", category: "10 Station" },
+  { id: "GHM 10-02", category: "10 Station" },
+  { id: "GHM 10-03", category: "10 Station" },
+  { id: "GHM 10-04", category: "10 Station" },
+  { id: "GHM 10-05", category: "10 Station" },
+  { id: "GHM 10-06", category: "10 Station" },
+  { id: "GHM 10-07", category: "10 Station" },
+  { id: "GHM 10-08", category: "10 Station" },
+  { id: "GHM 10-09", category: "10 Station" },
+  { id: "GHM 10-10", category: "10 Station" },
+  { id: "GHM 10-11", category: "10 Station" },
+  { id: "GHM 10-12", category: "10 Station" },
+
+  // Honeywagons
+  { id: "GHW 01", category: "Honeywagons" },
+  { id: "GHW 02", category: "Honeywagons" },
+  { id: "GHW 03", category: "Honeywagons" },
+  { id: "GHW 04", category: "Honeywagons" },
+  { id: "GHW 06", category: "Honeywagons" },
+  { id: "GHW 07", category: "Honeywagons" },
+  { id: "GHW 08", category: "Honeywagons" },
+
+  // Semi Wardrobe
+  { id: "GWT 1", category: "Semi Wardrobe" },
+  { id: "GWT 2", category: "Semi Wardrobe" },
+  { id: "GWT 3", category: "Semi Wardrobe" },
+  { id: "GWT 4", category: "Semi Wardrobe" },
+  { id: "GWT 5", category: "Semi Wardrobe" },
+  { id: "GWT 6", category: "Semi Wardrobe" },
+  { id: "GWT 7", category: "Semi Wardrobe" },
+
+  // Shorty Forty
+  { id: "GSV 01", category: "Shorty Forty" },
+  { id: "GSV 02", category: "Shorty Forty" },
+  { id: "GSV 03", category: "Shorty Forty" },
+  { id: "GSV 05", category: "Shorty Forty" },
+  { id: "GSV 06", category: "Shorty Forty" },
+  { id: "GSV 07", category: "Shorty Forty" },
+  { id: "GSV 08", category: "Shorty Forty" },
+  { id: "GSV 09", category: "Shorty Forty" },
+  { id: "GSV 10", category: "Shorty Forty" },
+  { id: "GSV 11", category: "Shorty Forty" },
+  { id: "GSV 13", category: "Shorty Forty" },
+  { id: "GSV 14", category: "Shorty Forty" },
+  { id: "GSV 15", category: "Shorty Forty" },
+  { id: "GSV 16", category: "Shorty Forty" },
+  { id: "GSV 17", category: "Shorty Forty" },
+  { id: "GSV 18", category: "Shorty Forty" },
+  { id: "GSV 19", category: "Shorty Forty" },
+  { id: "GSV 20", category: "Shorty Forty" },
+  { id: "SV 183 BI", category: "Shorty Forty" },
+  { id: "GSV 22", category: "Shorty Forty" },
+
+  // 3 Axle Day Cab
+  { id: "GDC 01", category: "3 Axle Day Cab" },
+  { id: "GDC 02", category: "3 Axle Day Cab" },
+  { id: "GDC 03", category: "3 Axle Day Cab" },
+  { id: "GDC 04", category: "3 Axle Day Cab" },
+  { id: "GDC 05", category: "3 Axle Day Cab" },
+  { id: "GDC 06", category: "3 Axle Day Cab" },
+  { id: "GDC 07", category: "3 Axle Day Cab" },
+  { id: "GDC 08", category: "3 Axle Day Cab" },
+  { id: "GDC 09", category: "3 Axle Day Cab" },
+  { id: "GDC 10", category: "3 Axle Day Cab" },
+  { id: "GDC 11", category: "3 Axle Day Cab" },
+  { id: "GDC 12", category: "3 Axle Day Cab" },
+  { id: "GDC 13", category: "3 Axle Day Cab" },
+
+  // Production Van
+  { id: "GPV 01", category: "Production Van" },
+  { id: "GPV 02", category: "Production Van" },
+
+  // Camera Truck
+  { id: "GCT 01", category: "Camera Truck" },
+  { id: "GCT 02", category: "Camera Truck" },
+  { id: "GCT 03", category: "Camera Truck" },
+  { id: "GCT 04", category: "Camera Truck" },
+  { id: "GCT 05", category: "Camera Truck" },
+
+  // 26' Crew Cab
+  { id: "GSD 01", category: "26' Crew Cab" },
+  { id: "GSD 02", category: "26' Crew Cab" },
+  { id: "GSD 03", category: "26' Crew Cab" },
+  { id: "GSD 04", category: "26' Crew Cab" },
+  { id: "GSD 05", category: "26' Crew Cab" },
+  { id: "GSD 06", category: "26' Crew Cab" },
+  { id: "GSD 07", category: "26' Crew Cab" },
+  { id: "GSD 08", category: "26' Crew Cab" },
+  { id: "GSD 09", category: "26' Crew Cab" },
+
+  // 30' Crew Cab
+  { id: "GGT 01", category: "30' Crew Cab" },
+  { id: "GGT 02", category: "30' Crew Cab" },
+  { id: "GGT 03", category: "30' Crew Cab" },
+  { id: "GGT 04", category: "30' Crew Cab" },
+];
+
+export const YARDS = ['Davenport', 'Movie Ranch'] as const;
+
+export const CATEGORIES = Array.from(new Set(MOCK_UNITS.map(u => u.category)));
+
+// Placeholder Geofences - Replace with actual Coordinates
+export const YARD_GEOFENCES: Record<string, { lat: number; lng: number; radiusMeters: number }> = {
+  'Davenport': {
+    lat: 34.052235, // Example Lat
+    lng: -118.243683, // Example Lng
+    radiusMeters: 500
+  },
+  'Movie Ranch': {
+    lat: 34.142508, // Example Lat
+    lng: -118.324200, // Example Lng
+    radiusMeters: 500
+  }
+};
