@@ -1,32 +1,20 @@
 import { GoogleGenAI } from "@google/genai";
-import { AuditSession, Unit } from '../types';
+import { AuditSession } from '../types';
 import { MOCK_UNITS } from '../constants';
 
-// Declare the injected variable from vite.config.ts
-// If Vite fails to replace this, accessing it directly would throw.
-// We handle this via the safe getter below.
-declare const __APP_ENV_API_KEY__: string;
+// Declare the constant injected by Vite
+declare const __GEMINI_API_KEY__: string;
 
-// Lazy initialization holder
 let aiClient: GoogleGenAI | null = null;
 
-// Helper to safely get the AI client instance
 const getAiClient = (): GoogleGenAI | null => {
   if (aiClient) return aiClient;
 
-  // Safe access to the injected variable
-  let apiKey = '';
-  try {
-    // @ts-ignore - In case the define plugin didn't run, check global scope or avoid crash
-    if (typeof __APP_ENV_API_KEY__ !== 'undefined') {
-      apiKey = __APP_ENV_API_KEY__;
-    }
-  } catch (e) {
-    console.warn("Could not access API Key variable");
-  }
+  // Use the injected constant directly
+  const apiKey = typeof __GEMINI_API_KEY__ !== 'undefined' ? __GEMINI_API_KEY__ : '';
 
-  if (!apiKey || apiKey.length === 0) {
-    console.warn("Gemini API Key is missing. AI features will not work.");
+  if (!apiKey) {
+    console.warn("Gemini API Key is missing.");
     return null;
   }
 
@@ -39,13 +27,11 @@ const getAiClient = (): GoogleGenAI | null => {
   }
 };
 
-// Helper to convert File to base64 for Gemini
 const fileToGenerativePart = async (file: File) => {
   return new Promise<{ inlineData: { data: string; mimeType: string } }>((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64String = reader.result as string;
-      // Remove data URL prefix (e.g., "data:image/jpeg;base64,")
       const base64Data = base64String.split(',')[1];
       resolve({
         inlineData: {
@@ -61,10 +47,7 @@ const fileToGenerativePart = async (file: File) => {
 
 export const processAuditFile = async (file: File, yardName: string): Promise<string[]> => {
   const ai = getAiClient();
-  if (!ai) {
-    console.error("AI Client not initialized (Missing API Key)");
-    return [];
-  }
+  if (!ai) return [];
 
   try {
     const filePart = await fileToGenerativePart(file);
@@ -84,7 +67,7 @@ export const processAuditFile = async (file: File, yardName: string): Promise<st
       
       Return ONLY a JSON array of strings containing the Unit IDs found. 
       Example format: ["GST 01-01", "GHM 08-02"]
-      Do not include markdown formatting or explanations, just the raw JSON.
+      Do not include markdown formatting.
     `;
 
     const response = await ai.models.generateContent({
@@ -95,7 +78,6 @@ export const processAuditFile = async (file: File, yardName: string): Promise<st
     });
 
     const text = response.text || "[]";
-    // Clean up potential markdown code blocks if Gemini adds them
     const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
     
     return JSON.parse(cleanText);
@@ -112,40 +94,23 @@ export const generateAuditReport = async (session: AuditSession): Promise<string
   const presentCount = Object.values(session.records).filter(r => r.status === 'PRESENT').length;
   const missingCount = Object.values(session.records).filter(r => r.status === 'MISSING').length;
   
-  // Prepare data for the prompt
   const missingUnits = Object.values(session.records)
     .filter(r => r.status === 'MISSING')
     .map(r => {
       const unit = MOCK_UNITS.find(u => u.id === r.unitId);
-      return `- ${r.unitId} (${unit?.category || 'Unknown'}) - Last known: ${unit?.expectedLocation || 'N/A'}`;
+      return `- ${r.unitId} (${unit?.category || 'Unknown'})`;
     }).join('\n');
 
-  const presentSample = Object.values(session.records)
-    .filter(r => r.status === 'PRESENT')
-    .slice(0, 5)
-    .map(r => r.unitId)
-    .join(', ');
-
   const prompt = `
-    You are an expert fleet manager assistant.
-    I have just completed a physical inventory check at the "${session.yard}" yard.
+    Audit Summary for ${session.yard} Yard.
+    Date: ${new Date(session.startTime).toLocaleDateString()}
+    Found: ${presentCount}
+    Missing: ${missingCount}
     
-    Here is the data:
-    - Date: ${new Date(session.startTime).toLocaleDateString()}
-    - Total Units Checked: ${Object.keys(session.records).length}
-    - Found (Present): ${presentCount} (Examples: ${presentSample}...)
-    - Not Found (Missing): ${missingCount}
-    
-    Here is the list of MISSING units that were marked not present:
+    Missing Units List:
     ${missingUnits}
     
-    Please write a concise, professional executive summary of this audit. 
-    1. Start with a high-level status (Success rate).
-    2. List the missing units clearly as "Action Items".
-    3. Suggest next steps (e.g., check GPS logs, contact dispatch).
-    4. Keep the tone operational and direct.
-    
-    Format the output in Markdown.
+    Write a brief executive summary and action plan. Format as Markdown.
   `;
 
   try {
@@ -156,6 +121,6 @@ export const generateAuditReport = async (session: AuditSession): Promise<string
     return response.text || "Unable to generate report.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Error generating AI report. Please check your API key and connection.";
+    return "Error generating AI report.";
   }
 };

@@ -5,8 +5,7 @@ import { MOCK_UNITS, CATEGORIES } from '../constants';
 import UnitCard from './UnitCard';
 import { processAuditFile } from '../services/geminiService';
 import ToDoList from './ToDoList';
-import SamsaraSyncModal from './SamsaraSyncModal';
-import { Search, Filter, ClipboardCheck, Upload, Loader2, Bell, Satellite } from 'lucide-react';
+import { Search, Filter, ClipboardCheck, Upload, Loader2, Bell } from 'lucide-react';
 
 interface AuditViewProps {
   session: AuditSession;
@@ -35,7 +34,6 @@ const AuditView: React.FC<AuditViewProps> = ({
   const [filterStatus, setFilterStatus] = useState<'All' | 'Pending' | 'Done'>('All');
   const [isProcessingFile, setIsProcessingFile] = useState(false);
   const [isToDoOpen, setIsToDoOpen] = useState(false);
-  const [isSamsaraModalOpen, setIsSamsaraModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const processedUnits = useMemo(() => {
@@ -90,16 +88,6 @@ const AuditView: React.FC<AuditViewProps> = ({
     }
   };
 
-  const handleSamsaraSync = (updates: { unitId: string, status: UnitStatus }[]) => {
-      const validUpdates = updates.filter(u => MOCK_UNITS.some(m => m.id === u.unitId));
-      if (validUpdates.length > 0) {
-        onBulkUpdateRecords(validUpdates);
-        alert(`Successfully synced ${validUpdates.length} units from Samsara GPS data.`);
-      } else {
-        alert("Synced with Samsara, but no matching units were found in this geofence.");
-      }
-  };
-
   // Calculate Progress
   const totalUnits = MOCK_UNITS.length;
   const auditedCount = Object.keys(session.records).length;
@@ -117,13 +105,6 @@ const AuditView: React.FC<AuditViewProps> = ({
         onAddTask={onAddTask}
         onToggleTask={onToggleTask}
         onDeleteTask={onDeleteTask}
-      />
-
-      <SamsaraSyncModal 
-        isOpen={isSamsaraModalOpen}
-        onClose={() => setIsSamsaraModalOpen(false)}
-        yardName={session.yard}
-        onSyncComplete={handleSamsaraSync}
       />
 
       {/* Loading Overlay */}
@@ -161,16 +142,6 @@ const AuditView: React.FC<AuditViewProps> = ({
                       {pendingHighPriorityTasks}
                     </span>
                   )}
-                </button>
-
-                {/* Samsara Button (Under Construction) */}
-                <button
-                    onClick={() => alert("🚧 This feature is currently under construction.")}
-                    className="flex items-center space-x-1 bg-slate-100 text-slate-400 px-3 py-2 rounded-lg text-xs font-bold border border-slate-200 cursor-not-allowed opacity-80"
-                >
-                    <Satellite size={14} />
-                    <span className="hidden sm:inline">Sync GPS</span>
-                    <span className="sm:hidden">GPS</span>
                 </button>
 
                 {/* Auto-fill Button */}

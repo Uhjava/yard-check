@@ -1,3 +1,4 @@
+
 import { Unit } from './types';
 
 export const MOCK_UNITS: Unit[] = [
@@ -209,17 +210,3 @@ export const MOCK_UNITS: Unit[] = [
 export const YARDS = ['Davenport', 'Movie Ranch'] as const;
 
 export const CATEGORIES = Array.from(new Set(MOCK_UNITS.map(u => u.category)));
-
-// Placeholder Geofences - Replace with actual Coordinates
-export const YARD_GEOFENCES: Record<string, { lat: number; lng: number; radiusMeters: number }> = {
-  'Davenport': {
-    lat: 34.052235, // Example Lat
-    lng: -118.243683, // Example Lng
-    radiusMeters: 500
-  },
-  'Movie Ranch': {
-    lat: 34.142508, // Example Lat
-    lng: -118.324200, // Example Lng
-    radiusMeters: 500
-  }
-};
