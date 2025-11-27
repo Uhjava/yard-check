@@ -9,8 +9,9 @@ let aiClient: GoogleGenAI | null = null;
 const getAiClient = (): GoogleGenAI | null => {
   if (aiClient) return aiClient;
 
-  // Safe access to process.env to avoid ReferenceErrors
-  const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) ? process.env.API_KEY : '';
+  // With Vite 'define', process.env.API_KEY is replaced by the actual string value at build time.
+  // The polyfill in index.html ensures 'process' exists if checked elsewhere, but here we access directly.
+  const apiKey = process.env.API_KEY || '';
 
   if (!apiKey) {
     console.warn("Gemini API Key is missing. AI features will not work.");
