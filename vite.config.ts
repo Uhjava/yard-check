@@ -8,9 +8,12 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Safely inject ONLY the API key as a string replacement
-      // This avoids "process is not defined" issues when accessing nested properties
-      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      // Define process.env as a real object. This prevents libraries that check 
+      // `process.env.NODE_ENV` from crashing if `process` is undefined or `env` is missing.
+      'process.env': {
+        NODE_ENV: JSON.stringify(mode),
+        API_KEY: JSON.stringify(env.API_KEY || '')
+      }
     },
   }
 })

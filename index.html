@@ -7,8 +7,13 @@
     <!-- Keep Tailwind CDN for simplicity in styling without postcss setup -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      // POLYFILL: Define window.process to prevent crashes in libraries expecting Node environment
-      window.process = window.process || { env: { NODE_ENV: 'production' } };
+      // ROBUST POLYFILLS for Browser Compatibility
+      window.global = window; // Fixes 'global is not defined' errors
+      window.process = window.process || { 
+        env: { NODE_ENV: 'production' },
+        version: '',
+        nextTick: function(cb) { setTimeout(cb, 0) }
+      };
       
       tailwind.config = {
         theme: {
@@ -27,28 +32,31 @@
         }
       }
 
-      // Global Error Handler for debugging white screens
+      // Global Error Handler for debugging
       window.onerror = function(msg, url, line, col, error) {
-        document.getElementById('root').innerHTML = `
-          <div style="padding: 20px; color: red; font-family: sans-serif;">
-            <h3>App Crash (Global):</h3>
-            <p>${msg}</p>
-            <pre>${url}:${line}:${col}</pre>
-          </div>
-        `;
+        console.error("Global Error:", msg, error);
+        const root = document.getElementById('root');
+        if (root) {
+          root.innerHTML = `
+            <div style="padding: 20px; color: #dc2626; font-family: sans-serif; background: #fef2f2; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+              <h3 style="font-weight: bold; margin-bottom: 10px;">Application Error</h3>
+              <p style="margin-bottom: 20px;">${msg}</p>
+              <button onclick="window.location.reload()" style="background: #dc2626; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Reload App</button>
+            </div>
+          `;
+        }
       };
 
       // Global Promise Rejection Handler
       window.onunhandledrejection = function(event) {
         console.error("Unhandled rejection:", event.reason);
-        // Optional: show in UI if critical
       };
     </script>
     <style>
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
@@ -66,7 +74,7 @@
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-brand-100">
     <div id="root">
       <!-- Fallback Loading State -->
-      <div style="height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #64748b;">
+      <div id="loading-container" style="height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #64748b;">
         <svg class="animate-spin" style="width: 40px; height: 40px; margin-bottom: 16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -74,6 +82,24 @@
         <span style="font-family: sans-serif; font-weight: 500;">Initializing YardCheck AI...</span>
       </div>
     </div>
+    
+    <!-- Safety Timeout Script -->
+    <script>
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        // If the loading container is still the only thing in root, assume stuck.
+        const loading = document.getElementById('loading-container');
+        if (loading && document.body.contains(loading)) {
+             loading.innerHTML = `
+                <div style="text-align: center; color: #ef4444;">
+                  <h3 style="font-weight: bold; font-size: 1.25rem; margin-bottom: 0.5rem;">Launch Timeout</h3>
+                  <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #64748b;">The app is taking too long to start.</p>
+                  <button onclick="window.location.reload()" style="background-color: #0f172a; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Reload Page</button>
+                </div>
+             `;
+        }
+      }, 5000); // 5 seconds timeout
+    </script>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>

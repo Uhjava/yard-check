@@ -163,10 +163,10 @@ const AuditView: React.FC<AuditViewProps> = ({
                   )}
                 </button>
 
-                {/* Samsara Button */}
+                {/* Samsara Button (Under Construction) */}
                 <button
-                    onClick={() => setIsSamsaraModalOpen(true)}
-                    className="flex items-center space-x-1 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-xs font-bold border border-blue-100 active:scale-95 transition-transform"
+                    onClick={() => alert("🚧 This feature is currently under construction.")}
+                    className="flex items-center space-x-1 bg-slate-100 text-slate-400 px-3 py-2 rounded-lg text-xs font-bold border border-slate-200 cursor-not-allowed opacity-80"
                 >
                     <Satellite size={14} />
                     <span className="hidden sm:inline">Sync GPS</span>
