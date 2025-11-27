@@ -23,7 +23,13 @@
         }
       }
     </script>
-  <script type="importmap">
+    <script>
+      // CRITICAL POLYFILLS FOR BROWSER COMPATIBILITY
+      // These prevent "ReferenceError: process is not defined" crashes
+      window.global = window;
+      window.process = { env: { NODE_ENV: 'production' } };
+    </script>
+<script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
