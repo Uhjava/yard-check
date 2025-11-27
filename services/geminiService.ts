@@ -9,11 +9,16 @@ let aiClient: GoogleGenAI | null = null;
 const getAiClient = (): GoogleGenAI | null => {
   if (aiClient) return aiClient;
 
-  // Access the key safely. Vite replaces 'process.env.API_KEY' with the string value.
-  // We use a temporary variable to avoid TypeScript/Runtime confusion.
-  const apiKey = process.env.API_KEY;
+  // Access the key safely. Vite replaces 'process.env.API_KEY' with the string value during build.
+  // We check typeof to avoid ReferenceErrors if process is missing.
+  let apiKey = '';
+  try {
+    apiKey = process.env.API_KEY;
+  } catch (e) {
+    console.warn("Could not access process.env.API_KEY");
+  }
 
-  if (!apiKey || typeof apiKey !== 'string' || apiKey.length === 0) {
+  if (!apiKey || apiKey.length === 0) {
     console.warn("Gemini API Key is missing. AI features will not work.");
     return null;
   }

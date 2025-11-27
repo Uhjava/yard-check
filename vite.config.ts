@@ -7,10 +7,15 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins: [react()],
-    base: '/', // Ensure absolute path for assets
+    base: '/',
+    server: {
+      hmr: {
+        overlay: false // Disable Vite's error overlay so we can use our custom one
+      }
+    },
     define: {
-      // Safely replace ONLY the specific API key string during build.
-      // This prevents 'process is not defined' errors while still injecting the key.
+      // Safely replace ONLY specific keys. 
+      // Do NOT try to redefine 'process' or 'process.env' object-wide as it breaks polyfills.
       'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
       'process.env.NODE_ENV': JSON.stringify(mode),
     },
