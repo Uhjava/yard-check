@@ -9,11 +9,11 @@ let aiClient: GoogleGenAI | null = null;
 const getAiClient = (): GoogleGenAI | null => {
   if (aiClient) return aiClient;
 
-  // With Vite's `define` config, this string is replaced at build time.
-  // We check if it exists and is not empty.
+  // Access the key safely. Vite replaces 'process.env.API_KEY' with the string value.
+  // We use a temporary variable to avoid TypeScript/Runtime confusion.
   const apiKey = process.env.API_KEY;
 
-  if (!apiKey || apiKey.length === 0) {
+  if (!apiKey || typeof apiKey !== 'string' || apiKey.length === 0) {
     console.warn("Gemini API Key is missing. AI features will not work.");
     return null;
   }
