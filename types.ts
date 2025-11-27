@@ -1,12 +1,3 @@
-// Augment NodeJS.ProcessEnv to include API_KEY
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      API_KEY: string;
-      [key: string]: string | undefined;
-    }
-  }
-}
 
 export enum UnitStatus {
   PENDING = 'PENDING',

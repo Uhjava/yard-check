@@ -2,6 +2,9 @@ import { GoogleGenAI } from "@google/genai";
 import { AuditSession, Unit } from '../types';
 import { MOCK_UNITS } from '../constants';
 
+// Declare the injected variable from vite.config.ts
+declare const __APP_ENV_API_KEY__: string;
+
 // Lazy initialization holder
 let aiClient: GoogleGenAI | null = null;
 
@@ -9,14 +12,8 @@ let aiClient: GoogleGenAI | null = null;
 const getAiClient = (): GoogleGenAI | null => {
   if (aiClient) return aiClient;
 
-  // Access the key safely. Vite replaces 'process.env.API_KEY' with the string value during build.
-  // We check typeof to avoid ReferenceErrors if process is missing.
-  let apiKey = '';
-  try {
-    apiKey = process.env.API_KEY;
-  } catch (e) {
-    console.warn("Could not access process.env.API_KEY");
-  }
+  // Use the injected global constant from Vite
+  const apiKey = __APP_ENV_API_KEY__;
 
   if (!apiKey || apiKey.length === 0) {
     console.warn("Gemini API Key is missing. AI features will not work.");

@@ -7,43 +7,12 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      // 1. Critical Polyfills for Node.js dependencies
+      // Essential Polyfills for Google GenAI SDK in Browser
+      // This prevents "ReferenceError: process is not defined"
+      window.process = { env: {} };
       window.global = window;
-      window.process = window.process || {};
-      window.process.env = window.process.env || {};
-      window.Buffer = window.Buffer || [];
-
-      // 2. Global Error Reporting Function
-      function showFatalError(title, details) {
-        const statusDiv = document.getElementById('app-status');
-        const contentDiv = document.getElementById('status-content');
-        if (statusDiv && contentDiv) {
-          statusDiv.style.backgroundColor = '#fef2f2'; // Red-50
-          statusDiv.style.color = '#991b1b'; // Red-800
-          statusDiv.innerHTML = `
-            <div style="max-width: 600px; margin: 0 auto; padding: 2rem;">
-              <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: #dc2626;">${title}</h1>
-              <pre style="background: white; padding: 1rem; border: 1px solid #fecaca; border-radius: 0.5rem; overflow: auto; font-family: monospace; font-size: 0.875rem;">${details}</pre>
-              <button onclick="window.location.reload()" style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: #dc2626; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: bold;">
-                Reload Application
-              </button>
-            </div>
-          `;
-        }
-        console.error(title, details);
-      }
-
-      // 3. Catch Synchronous Errors
-      window.onerror = function(message, source, lineno, colno, error) {
-        showFatalError("Runtime Error", `${message}\nat ${source}:${lineno}:${colno}\n\n${error?.stack || ''}`);
-        return true; // Prevent default console spam
-      };
-
-      // 4. Catch Promise Rejections (Async Errors)
-      window.onunhandledrejection = function(event) {
-        showFatalError("Unhandled Promise Rejection", event.reason?.stack || event.reason || "Unknown Async Error");
-      };
-      
+    </script>
+    <script>
       tailwind.config = {
         theme: {
           extend: {
@@ -78,19 +47,6 @@
 </head>
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-brand-100">
     <div id="root"></div>
-    
-    <!-- Full Screen Loader / Error Display -->
-    <div id="app-status" style="position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-col; align-items: center; justify-content: center;">
-      <div id="status-content" style="text-align: center;">
-        <div style="width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #0ea5e9; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem auto;"></div>
-        <h2 style="font-size: 1.25rem; font-weight: 600; color: #1e293b;">Initializing YardCheck AI...</h2>
-        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.5rem;">Loading resources</p>
-      </div>
-    </div>
-    <style>
-      @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
-
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>
